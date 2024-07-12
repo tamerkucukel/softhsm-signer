@@ -1,0 +1,11 @@
+services:
+  softhsm-aspnet-8-api:
+    build: .
+    image: softhsm-aspnet-8-api
+    container_name: softhsm-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080;
+    ports:
+      - "8090:8080"
+      - "8091:8081" 
