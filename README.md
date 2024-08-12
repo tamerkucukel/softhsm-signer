@@ -50,7 +50,7 @@ This will build the Docker images and start the services defined in the `docker-
 
 To generate requests `UnsignedTransaction` can be used in SoftHSM_API_NET_8.Models.
 - `txHash` can be obtained using `toHex()` method in Transaction class in NBitcoin library.
-- `keyPath` should be in form that specified in [BIP44]([bips/bip-0044.mediawiki at master · bitcoin/bips (github.com)](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki)).
+- `keyPath` should be in form that specified in [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki).
 - `coins` can be obtained using Serializer class in NBitcoin library by converting NBitcoin.Coin objects to string with `ToString<T>(T obj, Network network)` method. Network should be always provided when serializing.
 - `network` can be obtained using `ToString()` method in Network class in NBitcoin library.
 
@@ -65,7 +65,7 @@ To generate requests `UnsignedTransaction` can be used in SoftHSM_API_NET_8.Mode
 **Parameters:**
 
 - `keyPath`: The key path for which the public key is to be retrieved.
-	- `keyPath` should be in form that specified in [BIP44]([bips/bip-0044.mediawiki at master · bitcoin/bips (github.com)](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki)) .
+	- `keyPath` should be in form that specified in [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki).
 		- Example: `m/44'/0'/0'/0/0` (unescaped representation)
 	- `keyPath` should be in its escaped representation.
 
