@@ -50,7 +50,7 @@ namespace SoftHSM_API_NET_8.Controllers
         }
 
         [HttpGet("key/{keyPath}")]
-        public IActionResult GetPublicKey(string keyPath)
+        public IActionResult GetBTCAddress(string keyPath)
         {
             try
             {
@@ -62,8 +62,7 @@ namespace SoftHSM_API_NET_8.Controllers
                 // Convert "/" and "'" back.
                 keyPath = Uri.UnescapeDataString(keyPath);
 
-                string pubKey = SoftHSMService.GetBTCAddress(keyPath);
-                return Ok(pubKey);
+                return Ok(SoftHSMService.GetPubKey(keyPath).GetAddress(ScriptPubKeyType.Legacy, Network.TestNet).ToString());
             }
             catch(Exception ex)
             {

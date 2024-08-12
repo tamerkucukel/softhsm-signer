@@ -67,7 +67,7 @@ namespace SoftHSM_API_NET_8.Services
             }
         }
 
-        public static string GetBTCAddress(string keyPath)
+        public static PubKey GetPubKey(string keyPath)
         {
             using IPkcs11Library pkcs11Library = Factories.Pkcs11LibraryFactory.LoadPkcs11Library(Factories, Pkcs11LibraryPath, Helper.AppType);
             using ISession? session = Helper.GetApplicationSlot(pkcs11Library)?.OpenSession(SessionType.ReadWrite);
@@ -84,7 +84,7 @@ namespace SoftHSM_API_NET_8.Services
                     throw new Exception("Key path format is not valid!");
                 }
 
-                return ExtractMasterKey(session).Derive(path).Neuter().PubKey.ToString();
+                return ExtractMasterKey(session).Derive(path).Neuter().PubKey;
             }
             catch(Exception ex)
             {
