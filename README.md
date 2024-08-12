@@ -5,7 +5,7 @@ The `SoftHSM-API` project provides a set of API endpoints for signing transactio
 
 ## Features
 - **Sign Transactions:** Sign a given transaction with the specified key path and coins.
-- **Get Public Key:** Retrieve the public key for a given key path.
+- **Get BTC Address:** Retrieve the Bitcoin address for a given key path.
 
 ## Prerequisites
 - [Docker](https://www.docker.com/)
@@ -58,20 +58,20 @@ To generate requests `UnsignedTransaction` can be used in SoftHSM_API_NET_8.Mode
 
 - **200 OK:** Returns the signed raw transaction hex as a string.
 - **400 Bad Request:** Returns an error message if the JSON is invalid or if required fields are missing.
-### Get Public Key
+### Get BTC Address
 
 **Endpoint:** `GET /api/softhsm/key/{keyPath}`
 
 **Parameters:**
 
-- `keyPath`: The key path for which the public key is to be retrieved.
+- `keyPath`: The key path for which the Bitcoin address is to be retrieved.
 	- `keyPath` should be in form that specified in [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki).
 		- Example: `m/44'/0'/0'/0/0` (unescaped representation)
 	- `keyPath` should be in its escaped representation.
 
 **Response:**
 
-- **200 OK:** Returns the public key as a string.
+- **200 OK:** Returns the bitcoin address as a string.
 - **400 Bad Request:** Returns an error message if the `keyPath` is not provided or if there is any other issue.
 
 ## Extras
