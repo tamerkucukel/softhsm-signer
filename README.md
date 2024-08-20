@@ -4,8 +4,9 @@
 The `SoftHSM-API` project provides a set of API endpoints for signing transactions and retrieving public keys using the SoftHSM service. This project is built using ASP.NET Core and uses the NBitcoin library for handling Bitcoin transactions.
 
 ## Features
-- **Sign Transactions:** Sign a given transaction with the specified key path and coins.
-- **Get Public Key:** Retrieve the public key for a given key path.
+- **Sign Bitcoin Transactions:** Sign a given Bitcoin transaction with the specified key path and coins.
+- **Get Bitcoin Address:** Retrieve the Bitcoin address for a given key path.
+- **Get Ethereum Address:** Retrieve the Ethereum address for a given key path.
 
 ## Prerequisites
 - [Docker](https://www.docker.com/)
@@ -34,9 +35,9 @@ This will build the Docker images and start the services defined in the `docker-
 
 ## API Endpoints
 
-### Sign Transaction
+### Sign Bitcoin Transaction
 
-**Endpoint:** `POST /api/softhsm/transaction/sign`
+**Endpoint:** `POST /api/softhsm/transaction/sign/btc`
 
 **Request:**
 ```json
@@ -58,20 +59,37 @@ To generate requests `UnsignedTransaction` can be used in SoftHSM_API_NET_8.Mode
 
 - **200 OK:** Returns the signed raw transaction hex as a string.
 - **400 Bad Request:** Returns an error message if the JSON is invalid or if required fields are missing.
-### Get Public Key
 
-**Endpoint:** `GET /api/softhsm/key/{keyPath}`
+### Get Bitcoin Address
+
+**Endpoint:** `GET /api/softhsm/address/btc/{keyPath}`
 
 **Parameters:**
 
-- `keyPath`: The key path for which the public key is to be retrieved.
+- `keyPath`: The key path for which the Bitcoin address is to be retrieved.
 	- `keyPath` should be in form that specified in [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki).
 		- Example: `m/44'/0'/0'/0/0` (unescaped representation)
 	- `keyPath` should be in its escaped representation.
 
 **Response:**
 
-- **200 OK:** Returns the public key as a string.
+- **200 OK:** Returns the Bitcoin address as a string.
+- **400 Bad Request:** Returns an error message if the `keyPath` is not provided or if there is any other issue.
+
+### Get Ethereum Address
+
+**Endpoint:** `GET /api/softhsm/address/eth/{keyPath}`
+
+**Parameters:**
+
+- `keyPath`: The key path for which the Ethereum address is to be retrieved.
+	- `keyPath` should be in form that specified in [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki).
+		- Example: `m/44'/0'/0'/0/0` (unescaped representation)
+	- `keyPath` should be in its escaped representation.
+
+**Response:**
+
+- **200 OK:** Returns the Ethereum address as a string.
 - **400 Bad Request:** Returns an error message if the `keyPath` is not provided or if there is any other issue.
 
 ## Extras
