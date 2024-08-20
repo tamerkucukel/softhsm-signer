@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NBitcoin;
 using NBitcoin.JsonConverters;
+using Nethereum.Web3.Accounts;
 using SoftHSM_API_NET_8.Models;
 using SoftHSM_API_NET_8.Services;
 using System.Text.Json;
@@ -12,8 +13,8 @@ namespace SoftHSM_API_NET_8.Controllers
     [ApiController]
     public class SoftHSMController : ControllerBase
     {
-        [HttpPost("transaction/sign")]
-        public IActionResult SignTransaction(UnsignedTransaction unsignedtx)
+        [HttpPost("transaction/sign/btc")]
+        public IActionResult SignBTCTransaction(UnsignedBTCTransaction unsignedtx)
         {
             try
             {
@@ -49,7 +50,7 @@ namespace SoftHSM_API_NET_8.Controllers
             }
         }
 
-        [HttpGet("key/{keyPath}")]
+        [HttpGet("address/btc/{keyPath}")]
         public IActionResult GetBTCAddress(string keyPath)
         {
             try
@@ -62,7 +63,7 @@ namespace SoftHSM_API_NET_8.Controllers
                 // Convert "/" and "'" back.
                 keyPath = Uri.UnescapeDataString(keyPath);
 
-                return Ok(SoftHSMService.GetPubKey(keyPath).GetAddress(ScriptPubKeyType.Legacy, Network.TestNet).ToString());
+                return Ok(SoftHSMService.GetExtKey(keyPath).GetPublicKey().GetAddress(ScriptPubKeyType.Legacy, Network.TestNet).ToString());
             }
             catch(Exception ex)
             {
@@ -70,5 +71,25 @@ namespace SoftHSM_API_NET_8.Controllers
             }
         }
 
+        [HttpGet("address/eth/{keyPath}")]
+        public IActionResult GetETHAddress(string keyPath)
+        {
+            try
+            {
+                if (keyPath == null)
+                {
+                    return BadRequest("keyPath should be provided !");
+                }
+                // Convert "/" and "'" back.
+                keyPath = Uri.UnescapeDataString(keyPath);
+                var account = new Account(SoftHSMService.GetExtKey(keyPath).PrivateKey.ToHex());
+
+                return Ok(account.Address);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

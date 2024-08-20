@@ -39,7 +39,7 @@ namespace SoftHSM_API_NET_8.Services
             try
             {
 
-                if (!KeyPath.TryParse(keyPath, out KeyPath? path) || path == null)
+                if (!NBitcoin.KeyPath.TryParse(keyPath, out NBitcoin.KeyPath? path) || path == null)
                 {
                     throw new Exception("Key path format is not valid!");
                 }
@@ -67,7 +67,7 @@ namespace SoftHSM_API_NET_8.Services
             }
         }
 
-        public static PubKey GetPubKey(string keyPath)
+        public static ExtKey GetExtKey(string keyPath)
         {
             using IPkcs11Library pkcs11Library = Factories.Pkcs11LibraryFactory.LoadPkcs11Library(Factories, Pkcs11LibraryPath, Helper.AppType);
             using ISession? session = Helper.GetApplicationSlot(pkcs11Library)?.OpenSession(SessionType.ReadWrite);
@@ -75,18 +75,18 @@ namespace SoftHSM_API_NET_8.Services
             {
                 throw new Exception("Failed to open a session.");
             }
-            
+
             try
             {
 
-                if (!KeyPath.TryParse(keyPath, out KeyPath? path) || path == null)
+                if (!NBitcoin.KeyPath.TryParse(keyPath, out NBitcoin.KeyPath? path) || path == null)
                 {
                     throw new Exception("Key path format is not valid!");
                 }
 
-                return ExtractMasterKey(session).Derive(path).Neuter().PubKey;
+                return ExtractMasterKey(session).Derive(path);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
