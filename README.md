@@ -1,10 +1,11 @@
 # SoftHSM-API
 
 ## Overview
-The `SoftHSM-API` project provides a set of API endpoints for signing transactions and retrieving public keys using the SoftHSM service. This project is built using ASP.NET Core and uses the NBitcoin library for handling Bitcoin transactions.
+The `SoftHSM-API` project provides a set of API endpoints for signing transactions and retrieving blockchain addresses using the SoftHSM service. This project is built using ASP.NET Core and uses the NBitcoin and Nethereum libraries for handling Bitcoin and Ethereum transactions.
 
 ## Features
 - **Sign Bitcoin Transactions:** Sign a given Bitcoin transaction with the specified key path and coins.
+- **Sign Ethereum Transactions:** Sign a given Ethereum transaction with the specified key path and transaction input.
 - **Get Bitcoin Address:** Retrieve the Bitcoin address for a given key path.
 - **Get Ethereum Address:** Retrieve the Ethereum address for a given key path.
 
@@ -49,7 +50,7 @@ This will build the Docker images and start the services defined in the `docker-
 }
 ```
 
-To generate requests `UnsignedTransaction` can be used in SoftHSM_API_NET_8.Models.
+To generate requests `UnsignedBTCTransaction` can be used in SoftHSM_API_NET_8.Models.
 - `txHash` can be obtained using `toHex()` method in Transaction class in NBitcoin library.
 - `keyPath` should be in form that specified in [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki).
 - `coins` can be obtained using Serializer class in NBitcoin library by converting NBitcoin.Coin objects to string with `ToString<T>(T obj, Network network)` method. Network should be always provided when serializing.
@@ -58,6 +59,34 @@ To generate requests `UnsignedTransaction` can be used in SoftHSM_API_NET_8.Mode
 **Response:**
 
 - **200 OK:** Returns the signed raw transaction hex as a string.
+- **400 Bad Request:** Returns an error message if the JSON is invalid or if required fields are missing.
+
+### Sign Ethereum Transaction
+
+**Endpoint:** `POST /api/softhsm/transaction/sign/eth`
+
+**Request:**
+```json
+{ 
+	"data": "string",
+	"from": "string",
+	"to": "string",
+	"gas": "string",
+	"gasPrice": "string",
+	"value": "string",
+	"nonce": "string",
+	"chainId": "string",
+	"keyPath": "string"
+}
+```
+
+To generate requests `UnsignedETHTransaction` can be used in SoftHSM_API_NET_8.Models.
+- All members of `UnsignedETHTransaction` can be found in `TransactionInput` class in `Nethereum.RPC.Eth.DTOs`.
+- `keyPath` should be in form that specified in [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki).
+
+**Response:**
+
+- **200 OK:** Returns the signed raw transaction as a string.
 - **400 Bad Request:** Returns an error message if the JSON is invalid or if required fields are missing.
 
 ### Get Bitcoin Address
