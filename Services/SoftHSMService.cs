@@ -27,7 +27,7 @@ namespace SoftHSM_API_NET_8.Services
                 }
             }
         }
-        public static string SignTransfer(string? unsignedTxHash, string? keyPath, List<Coin> coinList)
+        public static string SignBTCTransfer(string? unsignedTxHash, string? keyPath, List<Coin> coinList)
         {
             using IPkcs11Library pkcs11Library = Factories.Pkcs11LibraryFactory.LoadPkcs11Library(Factories, Pkcs11LibraryPath, Helper.AppType);
             using ISession? session = Helper.GetApplicationSlot(pkcs11Library)?.OpenSession(SessionType.ReadWrite);
