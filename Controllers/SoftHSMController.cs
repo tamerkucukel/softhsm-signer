@@ -56,7 +56,7 @@ namespace SoftHSM_API_NET_8.Controllers
         public IActionResult SignETHTransaction(UnsignedETHTransaction unsignedTx)
         {
             try
-            {
+            {   
                 // Create transaction input from payload.
                 var txInput = new TransactionInput
                 {
@@ -70,7 +70,7 @@ namespace SoftHSM_API_NET_8.Controllers
                     ChainId = new HexBigInteger(BigInteger.Parse(unsignedTx.ChainId))
                 };
                 var account = new Account(SoftHSMService.GetExtKey(unsignedTx.KeyPath).PrivateKey.ToHex()); // 64-character hexadecimal string.
-                var signedTx = new AccountOfflineTransactionSigner().SignTransaction(account, txInput); // Sign with key from HSM.
+                var signedTx = new AccountOfflineTransactionSigner().SignTransaction(account, txInput, txInput.ChainId.Value); // Sign with key from HSM.
                 return Ok(signedTx); //Return raw transaction.
             }
             catch (JsonException ex)
