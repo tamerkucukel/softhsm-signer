@@ -39,17 +39,17 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine3.20 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["SoftHSM-API-NET-8.csproj", "."]
-RUN dotnet restore "./SoftHSM-API-NET-8.csproj"
+COPY ["SoftHSMSigner.csproj", "."]
+RUN dotnet restore "./SoftHSMSigner.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "./SoftHSM-API-NET-8.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./SoftHSMSigner.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./SoftHSM-API-NET-8.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./SoftHSMSigner.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "SoftHSM-API-NET-8.dll"]
+ENTRYPOINT ["dotnet", "SoftHSMSigner.dll"]

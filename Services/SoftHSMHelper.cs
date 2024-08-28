@@ -2,7 +2,7 @@
 using Net.Pkcs11Interop.Common;
 using Net.Pkcs11Interop.HighLevelAPI;
 
-namespace SoftHSM_API_NET_8.Services
+namespace SoftHSMSigner.Services
 {
     internal static class Helper
     {
@@ -17,9 +17,6 @@ namespace SoftHSM_API_NET_8.Services
         public static string mnemonic = "clap angry pass cheap acquire try coral exist bargain asset harsh uphold clump disagree shell guide festival chair gain lounge vivid life find cake";
 
         public static string MasterKeyObjectLabel = "Master-Key";
-
-        public static Network network = Network.TestNet;
-        
 
         public static ISlot? GetApplicationSlot(IPkcs11Library pkcs11Library)
         {

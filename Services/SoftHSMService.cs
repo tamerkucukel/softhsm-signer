@@ -3,7 +3,7 @@ using Net.Pkcs11Interop.Common;
 using Net.Pkcs11Interop.HighLevelAPI;
 using ISession = Net.Pkcs11Interop.HighLevelAPI.ISession;
 
-namespace SoftHSM_API_NET_8.Services
+namespace SoftHSMSigner.Services
 {
     public static class SoftHSMService
     {
@@ -27,7 +27,7 @@ namespace SoftHSM_API_NET_8.Services
                 }
             }
         }
-        public static string SignBTCTransfer(string? unsignedTxHash, string? keyPath, List<Coin> coinList)
+        public static ExtKey GetExtKey(string keyPath)
         {
             using IPkcs11Library pkcs11Library = Factories.Pkcs11LibraryFactory.LoadPkcs11Library(Factories, Pkcs11LibraryPath, Helper.AppType);
             using ISession? session = Helper.GetApplicationSlot(pkcs11Library)?.OpenSession(SessionType.ReadWrite);
@@ -38,57 +38,13 @@ namespace SoftHSM_API_NET_8.Services
 
             try
             {
-
-                if (!NBitcoin.KeyPath.TryParse(keyPath, out NBitcoin.KeyPath? path) || path == null)
-                {
-                    throw new Exception("Key path format is not valid!");
-                }
-
-                // Parse unsigned transaction and sign it.
-                if (!Transaction.TryParse(unsignedTxHash, Helper.network, out Transaction? tx) || tx == null)
-                {
-                    throw new Exception("Failed to parse the transaction from the provided payload!");
-                }
-
-                // Derive key from given key path.
-                ExtKey rootKey = ExtractMasterKey(session);
-                var derivedKey = rootKey.Derive(path);
-                tx.Sign(derivedKey.PrivateKey.GetBitcoinSecret(Network.TestNet), coinList);
-                return tx.ToHex();
-            }
-            catch(Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            finally
-            {
-                // Ensure logout happens even if an exception is thrown
-                session.Logout();
-            }
-        }
-
-        public static ExtKey GetExtKey(string keyPath)
-        {
-            using IPkcs11Library pkcs11Library = Factories.Pkcs11LibraryFactory.LoadPkcs11Library(Factories, Pkcs11LibraryPath, Helper.AppType);
-            using ISession? session = Helper.GetApplicationSlot(pkcs11Library)?.OpenSession(SessionType.ReadWrite);
-            if (session == null) 
-            {
-                throw new Exception("Failed to open a session.");
-            }
-
-            try
-            {
-
-                if (!NBitcoin.KeyPath.TryParse(keyPath, out NBitcoin.KeyPath? path) || path == null)
-                {
-                    throw new Exception("Key path format is not valid!");
-                }
-
+                if (!KeyPath.TryParse(keyPath, out KeyPath? path)) throw new Exception("Key path is not valid.");
+                if (path == null) throw new Exception("Key path should be provided, or in valid format.");
                 return ExtractMasterKey(session).Derive(path);
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Derivation from key path is failed, something happened unexpectedly.", ex.InnerException);
             }
             finally
             {
@@ -97,7 +53,7 @@ namespace SoftHSM_API_NET_8.Services
             }
 
         }
-        
+
         // This function initializes a token in a SoftHSM slot with desired Token Label
         // configured in Helper class.
         private static void InitCryptoToken(IPkcs11Library pkcs11Library)
