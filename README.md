@@ -17,7 +17,7 @@ The `SoftHSM-API` project provides a set of API endpoints for signing transactio
 
 ### Clone the Repository
 ```sh
-git clone https://github.com/tamerkucukel/mb_softhsm-docker-api.git
+git clone https://github.com/tamerkucukel/softhsm-signer.git
 cd softhsm-signer
 ```
 
