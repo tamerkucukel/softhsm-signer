@@ -1,7 +1,7 @@
-# SoftHSM-API
+# SoftHSM-Signer
 
 ## Overview
-The `SoftHSM-API` project provides a set of API endpoints for signing transactions and retrieving blockchain addresses using the SoftHSM service. This project is built using ASP.NET Core and uses the NBitcoin and Nethereum libraries for handling Bitcoin and Ethereum transactions.
+The `SoftHSM-Signer` project provides a set of API endpoints for signing transactions and retrieving blockchain addresses using the SoftHSM service. This project is built using ASP.NET Core and uses the NBitcoin and Nethereum libraries for handling Bitcoin and Ethereum transactions.
 
 ## Features
 - **Sign Bitcoin Transactions:** Sign a given Bitcoin transaction with the specified key path and coins.
